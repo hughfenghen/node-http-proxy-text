@@ -63,12 +63,7 @@ function handleCompressed(res, _write, _end, unzip, zip, callback) {
   // Concat the unzip stream.
   let concatWrite = concatStream(data => {
     let body;
-    try {
-      body = JSON.parse(data.toString());
-    } catch (e) {
-      body = data.toString();
-      console.log('JSON.parse error:', e);
-    }
+    body = data.toString();
 
     // Custom modified logic
     if (typeof callback === 'function') {
@@ -77,7 +72,7 @@ function handleCompressed(res, _write, _end, unzip, zip, callback) {
 
     let finish = _body => {
       // Converts the JSON to buffer.
-      let body = new Buffer(JSON.stringify(_body));
+      let body = new Buffer(_body);
 
       // Call the response method and recover the content-encoding.
       zip.on('data', chunk => _write.call(res, chunk));
@@ -107,12 +102,7 @@ function handleUncompressed(res, _write, _end, callback) {
 
   res.end = () => {
     let body;
-    try {
-      body = JSON.parse(buffer.toBuffer().toString());
-    } catch (e) {
-      body = buffer.toBuffer().toString();
-      console.log('JSON.parse error:', e);
-    }
+    body = buffer.toBuffer().toString();
 
     // Custom modified logic
     if (typeof callback === 'function') {
@@ -121,7 +111,7 @@ function handleUncompressed(res, _write, _end, callback) {
 
     let finish = _body => {
       // Converts the JSON to buffer.
-      let body = new Buffer(JSON.stringify(_body));
+      let body = new Buffer(_body);
 
       // Call the response method
       _write.call(res, body);

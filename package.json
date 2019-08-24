@@ -1,7 +1,7 @@
 {
-  "name": "node-http-proxy-json",
+  "name": "node-http-proxy-text",
   "version": "0.1.6",
-  "description": "for node-http-proxy transform the response json from the proxied server.",
+  "description": "Modify node-http-proxy response’s text",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha -R spec ./test/*.js"
