@@ -70,12 +70,13 @@ describe('modifyResponse--gzip', function() {
       // Listen for the `proxyRes` event on `proxy`.
       proxy.on('proxyRes', (proxyRes, req, res) => {
         modifyResponse(res, proxyRes, body => {
+          body = JSON.parse(body)
           if (body) {
             // modify some information
             body.age = 2;
             delete body.version;
           }
-          return body;
+          return JSON.stringify(body);
         });
       });
     });
@@ -108,12 +109,13 @@ describe('modifyResponse--gzip', function() {
       // Listen for the `proxyRes` event on `proxy`.
       proxy.on('proxyRes', (proxyRes, req, res) => {
         modifyResponse(res, proxyRes, body => {
+          body = JSON.parse(body)
           if (body) {
             // modify some information
             body.age = 2;
             delete body.version;
           }
-          return Promise.resolve(body);
+          return Promise.resolve(JSON.stringify(body));
         });
       });
     });
