@@ -75,7 +75,7 @@ function handleCompressed(res, _write, _end, unzip, zip, callback) {
 
     let finish = _body => {
       // Converts the JSON to buffer.
-      let body = new Buffer(_body);
+      let body = Buffer.from(_body);
 
       // Call the response method and recover the content-encoding.
       zip.on('data', chunk => _write.call(res, chunk));
@@ -114,7 +114,7 @@ function handleUncompressed(res, _write, _end, callback) {
 
     let finish = _body => {
       // Converts the JSON to buffer.
-      let body = new Buffer(_body);
+      let body = Buffer.from(_body);
 
       // Call the response method
       _write.call(res, body);
