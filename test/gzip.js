@@ -12,8 +12,11 @@ const modifyResponse = require('../');
 
 const SERVER_PORT = 5000;
 const TARGET_SERVER_PORT = 5001;
+const isObject = function (obj) {
+  return Object.prototype.toString.call(obj) === '[object Object]';
+}
 
-describe('modifyResponse--gzip', function() {
+describe('modifyResponse--gzip', function () {
   let proxy, server, targetServer;
   beforeEach(() => {
     // Create a proxy server

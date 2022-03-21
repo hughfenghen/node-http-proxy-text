@@ -12,8 +12,11 @@ const modifyResponse = require('../');
 
 const SERVER_PORT = 5004;
 const TARGET_SERVER_PORT = 5005;
+const isObject = function (obj) {
+  return Object.prototype.toString.call(obj) === '[object Object]';
+}
 
-describe('modifyResponse--uncompressed', function() {
+describe('modifyResponse--uncompressed', function () {
   let proxy, server, targetServer;
   beforeEach(() => {
     // Create a proxy server
@@ -51,7 +54,7 @@ describe('modifyResponse--uncompressed', function() {
   describe('callback returns data', () => {
     beforeEach(() => {
       // Listen for the `proxyRes` event on `proxy`.
-      proxy.on('proxyRes', function(proxyRes, req, res) {
+      proxy.on('proxyRes', function (proxyRes, req, res) {
         modifyResponse(res, proxyRes, body => {
           body = JSON.parse(body)
           if (body) {

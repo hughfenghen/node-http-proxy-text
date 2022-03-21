@@ -36,6 +36,10 @@ module.exports = function modifyResponse(res, proxyRes, callback) {
       unzip = zlib.createBrotliDecompress();
       zip = zlib.createBrotliCompress();
       break;
+    case 'br':
+      unzip = zlib.BrotliDecompress && zlib.BrotliDecompress();
+      zip = zlib.BrotliCompress && zlib.BrotliCompress();
+      break;
   }
 
   // The cache response method can be called after the modification.
@@ -60,10 +64,7 @@ module.exports = function modifyResponse(res, proxyRes, callback) {
  */
 function handleCompressed(res, _write, _end, unzip, zip, callback) {
   // The rewrite response method is replaced by unzip stream.
-  // bug: https://github.com/langjt/node-http-proxy-json/issues/16
-  res.write = data => {
-    unzip.write(data)
-  };
+  res.write = data => { unzip.write(data) };
 
   res.end = () => unzip.end();
 
@@ -78,6 +79,10 @@ function handleCompressed(res, _write, _end, unzip, zip, callback) {
     }
 
     let finish = _body => {
+      // empty response body
+      if (!_body) {
+        _body = '';
+      }
       // Converts the JSON to buffer.
       let body = Buffer.from(_body);
 
@@ -117,6 +122,10 @@ function handleUncompressed(res, _write, _end, callback) {
     }
 
     let finish = _body => {
+      // empty response body
+      if (!_body) {
+        _body = '';
+      }
       // Converts the JSON to buffer.
       let body = Buffer.from(_body);
 

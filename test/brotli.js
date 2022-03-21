@@ -52,7 +52,6 @@ describe('modifyResponse--brotli', () => {
             version: '1.0.0',
           })
         );
-
         res.end();
       })
       .listen(TARGET_SERVER_PORT);
