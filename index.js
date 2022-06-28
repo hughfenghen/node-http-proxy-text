@@ -36,10 +36,6 @@ module.exports = function modifyResponse(res, proxyRes, callback) {
       unzip = zlib.createBrotliDecompress();
       zip = zlib.createBrotliCompress();
       break;
-    case 'br':
-      unzip = zlib.BrotliDecompress && zlib.BrotliDecompress();
-      zip = zlib.BrotliCompress && zlib.BrotliCompress();
-      break;
   }
 
   // The cache response method can be called after the modification.
@@ -49,7 +45,14 @@ module.exports = function modifyResponse(res, proxyRes, callback) {
   if (unzip) {
     unzip.on('error', function (e) {
       console.log('Unzip error: ', e);
-      _end.call(res);
+      // Sometimes, the server doesn't send EOF
+      if ('unexpected end of file' === e.message) {
+        unzip.flush()
+        unzip.close()
+        unzip.emit('end')
+      } else {
+        _end.call(res);
+      }
     });
     handleCompressed(res, _write, _end, unzip, zip, callback);
   } else if (!contentEncoding) {

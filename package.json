@@ -1,6 +1,6 @@
 {
   "name": "node-http-proxy-text",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Modify node-http-proxy response’s text",
   "main": "index.js",
   "scripts": {
